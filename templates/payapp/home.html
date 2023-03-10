@@ -1,0 +1,23 @@
+{% extends 'payapp/base.html' %}
+
+{% block title %}
+    Comment Store Homepage
+{% endblock %}
+
+{% block content %}
+    <h1>This is the Comment Store Application Home Page</h1>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Comment</th>
+        </tr>
+    {% for comment in cmnt_list %}
+        <tr>
+            <td>{{ comment.name |upper }}</td>
+            <td>{{ comment.visit_date }}</td>
+            <td>{{ comment.comment_str|truncatewords:"10" }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+{% endblock %}
