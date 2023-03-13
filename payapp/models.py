@@ -26,3 +26,4 @@ class Currency(models.Model):
 
     def __str__(self):
         return self.currency_type + ' ' + self.symbol
+

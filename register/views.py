@@ -14,7 +14,11 @@ def register_user(request):
         register_form = RegisterForm(request.POST)
         if register_form.is_valid():
             user = register_form.save()
-            # process data?
+            #####
+            # use restful service to
+            # initialise £1000 in their currency
+            # then link to user in balance table
+            #####
             return redirect('login')
         messages.error(request, "Unsuccessful registration. Invalid info")
     else:
