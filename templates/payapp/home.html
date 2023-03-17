@@ -5,7 +5,8 @@
 {% endblock %}
 
 {% block content %}
-    <h1>This is the Comment Store Application Home Page</h1>
+    {% if user.is_authenticated %}
+    <h1>This is the Online Payment Service Home Page</h1>
     <table>
         <tr>
             <th>Name</th>
@@ -20,4 +21,5 @@
         </tr>
     {% endfor %}
     </table>
+    {% endif %}
 {% endblock %}

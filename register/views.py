@@ -6,9 +6,11 @@ from .forms import RegisterForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
+from django.views.decorators.csrf import csrf_protect
 
 
 # Create your views here.
+@csrf_protect
 def register_user(request):
     if request.method == 'POST':
         register_form = RegisterForm(request.POST)
@@ -27,6 +29,7 @@ def register_user(request):
     return render(request, 'register/register.html', {'register_user': register_form})
 
 
+@csrf_protect
 def login_user(request):
     if request.method == 'POST':
         login_form = AuthenticationForm(request, request.POST)

@@ -1,5 +1,7 @@
 from django.db import models
 
+from register.models import User
+
 
 # Create your models here.
 class Currency(models.Model):
@@ -27,3 +29,13 @@ class Currency(models.Model):
     def __str__(self):
         return self.currency_type + ' ' + self.symbol
 
+
+class Transaction(models.Model):
+    from_user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='from_user')
+    to_user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='to_user')
+    amount = models.DecimalField(decimal_places=2, max_digits=12, default=0)
+    # how to keep track of balance after transactions
+
+
+class Notification(models.Model):
+    pass

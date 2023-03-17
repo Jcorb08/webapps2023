@@ -26,7 +26,8 @@ SECRET_KEY = 'django-insecure-68$22w&qvwu4gcg(o^xxngo38fh=bwa&#aw_lklj%!^fji3i!v
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+SECURE_SSL_REDIRECT = True
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Application definition
 
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'crispy_forms',
     'crispy_bootstrap4',
+    'django_extensions',
     'payapp.apps.PayappConfig',
     'register.apps.RegisterConfig'
 ]
@@ -131,3 +133,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Crispy Forms
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# RunServerPlus
+RUNSERVERPLUS_SERVER_ADDRESS_PORT = 'localhost:8000'
