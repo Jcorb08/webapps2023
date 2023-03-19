@@ -1,25 +1,54 @@
 {% extends 'payapp/base.html' %}
 
 {% block title %}
-    Comment Store Homepage
+    PayApp Homepage
 {% endblock %}
 
 {% block content %}
     {% if user.is_authenticated %}
     <h1>This is the Online Payment Service Home Page</h1>
+    <h2>Notification List:</h2>
+    <table>
+{#    # = payment request from current user's account (from user to another)#}
+        <tr>
+            <th>Request From</th>
+            <th>Amount</th>
+        </tr>
+        {% for transaction in transaction_list %}
+            <tr>
+                {#                <td>{{ comment.name |upper }}</td>#}
+                {#                <td>{{ comment.visit_date }}</td>#}
+                {#                <td>{{ comment.comment_str|truncatewords:"10" }}</td>#}
+            </tr>
+        {% endfor %}
+{#        # = payment into current user's account (to user from another) #}
+        <tr>
+            <th>Payment From</th>
+            <th>Amount</th>
+        </tr>
+        {% for transaction in transaction_list %}
+            <tr>
+                {#                <td>{{ comment.name |upper }}</td>#}
+                {#                <td>{{ comment.visit_date }}</td>#}
+                {#                <td>{{ comment.comment_str|truncatewords:"10" }}</td>#}
+            </tr>
+        {% endfor %}
+    </table>
+    <h2>Transaction List:</h2>
     <table>
         <tr>
-            <th>Name</th>
-            <th>Date</th>
-            <th>Comment</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Amount</th>
+            <th>Overall Balance</th>
         </tr>
-    {% for comment in cmnt_list %}
-        <tr>
-            <td>{{ comment.name |upper }}</td>
-            <td>{{ comment.visit_date }}</td>
-            <td>{{ comment.comment_str|truncatewords:"10" }}</td>
-        </tr>
-    {% endfor %}
+        {% for transaction in transaction_list %}
+            <tr>
+{#                <td>{{ comment.name |upper }}</td>#}
+{#                <td>{{ comment.visit_date }}</td>#}
+{#                <td>{{ comment.comment_str|truncatewords:"10" }}</td>#}
+            </tr>
+        {% endfor %}
     </table>
     {% endif %}
 {% endblock %}
