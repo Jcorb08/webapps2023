@@ -1,0 +1,18 @@
+{% extends 'payapp/base.html' %}
+
+{% block title %}
+    PayApp {{ form_title }}
+{% endblock %}
+
+{# Template for both requesting and sending money #}
+{% block content %}
+    {% if user.is_authenticated %}
+        <h1>{{ form_title }}</h1>
+        <form method="post" class="form-group">
+            {% csrf_token %}
+            {{ pay_form.errors }}
+            {{ pay_form|crispy }}
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+    {% endif %}
+{% endblock %}

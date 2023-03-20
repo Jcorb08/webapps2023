@@ -51,5 +51,5 @@ class BalanceHistory(models.Model):
 class Notification(models.Model):
     from_user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='from_user')
     to_user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='to_user')
-    amount = models.DecimalField(decimal_places=2, max_digits=12, default=0)
+    amount = models.DecimalField(decimal_places=2, max_digits=12, default=0, min_value=0)
     dismissed = models.BooleanField()
