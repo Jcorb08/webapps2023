@@ -17,11 +17,14 @@ from django.contrib import admin
 from django.urls import path
 from payapp import views
 from register import views as register_views
+from payapp import views as payapp_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name="home"),
     path('register/', register_views.register_user, name='register'),
     path('login/', register_views.login_user, name='login'),
-    path('logout/', register_views.logout_user, name='logout')
+    path('logout/', register_views.logout_user, name='logout'),
+    path('request/', payapp_views.payment, name='request'),
+    path('send/', payapp_views.payment, name='send')
 ]

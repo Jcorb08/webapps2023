@@ -1,20 +1,20 @@
 [
   {
-    "model": "payapp.currency",
+    "model": "register.currency",
     "fields": {
       "currency_type": "GBP",
       "symbol": "£"
     }
   },
   {
-    "model": "payapp.currency",
+    "model": "register.currency",
     "fields": {
       "currency_type": "USD",
       "symbol": "$"
     }
   },
   {
-    "model": "payapp.currency",
+    "model": "register.currency",
     "fields": {
       "currency_type": "EUR",
       "symbol": "€"

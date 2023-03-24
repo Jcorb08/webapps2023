@@ -1,8 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from register.models import User
+from register.models import User, Currency
 from django.core.exceptions import ValidationError
-from payapp.models import Currency
 
 
 class RegisterForm(UserCreationForm):
