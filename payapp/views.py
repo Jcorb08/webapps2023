@@ -23,13 +23,13 @@ def home(request):
         ######
         # get all transactions relating to user
         ######
-        transaction_history = BalanceHistory.objects\
+        balance_history = BalanceHistory.objects\
             .filter(user=request.user)
         # send to template
         return render(request, 'payapp/home.html', {
             'requests': requests,
             'payments': payments,
-            'transaction_history': transaction_history
+            'balance_history': balance_history
             })
     else:
         return redirect('login')

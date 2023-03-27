@@ -14,11 +14,10 @@
             <th>Request From</th>
             <th>Amount</th>
         </tr>
-        {% for transaction in transaction_list %}
+        {% for request in requests %}
             <tr>
-                {#                <td>{{ comment.name |upper }}</td>#}
-                {#                <td>{{ comment.visit_date }}</td>#}
-                {#                <td>{{ comment.comment_str|truncatewords:"10" }}</td>#}
+                <td>{{ request.to_user.username }}</td>
+                <td>{{ request.amount }}</td>
             </tr>
         {% endfor %}
 {#        # = payment into current user's account (to user from another) #}
@@ -26,11 +25,10 @@
             <th>Payment From</th>
             <th>Amount</th>
         </tr>
-        {% for transaction in transaction_list %}
+        {% for payment in payments %}
             <tr>
-                {#                <td>{{ comment.name |upper }}</td>#}
-                {#                <td>{{ comment.visit_date }}</td>#}
-                {#                <td>{{ comment.comment_str|truncatewords:"10" }}</td>#}
+                <td>{{ payment.from_user.username }}</td>
+                <td>{{ payment.amount }}</td>
             </tr>
         {% endfor %}
     </table>
@@ -42,11 +40,16 @@
             <th>Amount</th>
             <th>Overall Balance</th>
         </tr>
-        {% for transaction in transaction_list %}
+        {% for balance in balance_history %}
             <tr>
-{#                <td>{{ comment.name |upper }}</td>#}
-{#                <td>{{ comment.visit_date }}</td>#}
-{#                <td>{{ comment.comment_str|truncatewords:"10" }}</td>#}
+                <td>{{ balance.transaction.from_user.username }}</td>
+                <td>{{ balance.transaction.to_user.username }}</td>
+                <td>{{ balance.amount }}</td>
+                {% if balance.transaction.to_user == user %}
+                    <td> + {{ balance.balance }}</td>
+                {% else %}
+                    <td> - {{ balance.balance }}</td>
+                {% endif %}
             </tr>
         {% endfor %}
     </table>
