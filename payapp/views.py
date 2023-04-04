@@ -33,7 +33,6 @@ def home(request):
         balance_history = BalanceHistory.objects\
             .filter(user=request.user.pk)
         print(balance_history)
-
         # send to template
         return render(request, 'payapp/home.html', {
             'requests_list': requests_list,
