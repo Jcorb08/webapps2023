@@ -6,52 +6,83 @@
 
 {% block content %}
     {% if user.is_authenticated %}
-    <h1>This is the Online Payment Service Home Page</h1>
-    <h2>Notification List:</h2>
-    <table>
-{#    # = payment request from current user's account (from user to another)#}
-        <tr>
-            <th>Request From</th>
-            <th>Amount</th>
-        </tr>
-        {% for request in requests %}
-            <tr>
-                <td>{{ request.to_user.username }}</td>
-                <td>{{ request.amount }}</td>
-            </tr>
-        {% endfor %}
-{#        # = payment into current user's account (to user from another) #}
-        <tr>
-            <th>Payment From</th>
-            <th>Amount</th>
-        </tr>
-        {% for payment in payments %}
-            <tr>
-                <td>{{ payment.from_user.username }}</td>
-                <td>{{ payment.amount }}</td>
-            </tr>
-        {% endfor %}
-    </table>
-    <h2>Transaction List:</h2>
-    <table>
-        <tr>
-            <th>From</th>
-            <th>To</th>
-            <th>Amount</th>
-            <th>Overall Balance</th>
-        </tr>
-        {% for balance in balance_history %}
-            <tr>
-                <td>{{ balance.transaction.from_user.username }}</td>
-                <td>{{ balance.transaction.to_user.username }}</td>
-                <td>{{ balance.amount }}</td>
-                {% if balance.transaction.to_user == user %}
-                    <td> + {{ balance.balance }}</td>
-                {% else %}
-                    <td> - {{ balance.balance }}</td>
+        <h1>This is the Online Payment Service Home Page</h1>
+        {% if requests_list or requested_list %}
+            <h2>Notification List:</h2>
+            <table class="table table-hover table-sm">
+            {#    # = payment request from current user's account (from user to another)#}
+                {% if requests_list %}
+                    <thead>
+                        <tr class="table-info">
+                            <th scope="col">#</th>
+                            <th scope="col">Request To</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Remove</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for request in requests_list %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>{{ request.to_user.username }}</td>
+                            <td>{{ request.amount }}</td>
+                            <td><a class="btn btn-danger btn-sm" href="/?notification={{ request.pk }}">Remove</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
                 {% endif %}
-            </tr>
-        {% endfor %}
-    </table>
+                {% if requested_list %}
+                    {# = payment into current user's account (to user from another) #}
+                    <thead>
+                        <tr class="table-info">
+                            <th scope="col">#</th>
+                            <th scope="col">Request From</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Remove</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for requested in requested_list %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>{{ requested.from_user.username }}</td>
+                            <td>{{ requested.amount }}</td>
+                            <td><a class="btn btn-danger btn-sm" href="/?notification={{ requested.pk }}">Remove</a>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                {% endif %}
+            </table>
+        {% endif %}
+        {% if balance_history %}
+            <h2>Transaction List:</h2>
+            <table class="table table-striped table-hover table-sm">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">From</th>
+                        <th scope="col">To</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Overall Balance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for balance in balance_history %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ balance.transaction.from_user.username }}</td>
+                        <td>{{ balance.transaction.to_user.username }}</td>
+                        <td>{{ balance.amount }}</td>
+                        {% if balance.transaction.to_user == user %}
+                            <td> + {{ balance.balance }}</td>
+                        {% else %}
+                            <td> - {{ balance.balance }}</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
     {% endif %}
 {% endblock %}
