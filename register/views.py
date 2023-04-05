@@ -1,5 +1,3 @@
-from django.shortcuts import render
-
 # Create your views here.
 from django.shortcuts import render, redirect
 from .forms import RegisterForm
@@ -16,11 +14,8 @@ def register_user(request):
         register_form = RegisterForm(request.POST)
         if register_form.is_valid():
             user = register_form.save()
-            #####
-            # use restful service to
-            # initialise £1000 in their currency
-            # then link to user in balance table
-            #####
+            # initialised £1000
+            # use restful service to change to be exchange rate of 1000
             return redirect('login')
         messages.error(request, "Unsuccessful registration. Invalid info")
     else:
@@ -31,6 +26,9 @@ def register_user(request):
 
 @csrf_protect
 def login_user(request):
+    # when login required redirects here remove next querystring
+    if request.GET.get('next'):
+        return redirect('login')
     if request.method == 'POST':
         login_form = AuthenticationForm(request, request.POST)
         if login_form.is_valid():
