@@ -15,7 +15,7 @@ class Transaction(models.Model):
 class BalanceHistory(models.Model):
     transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    dismissed = models.BooleanField()
+    dismissed = models.BooleanField(default=False)
     balance = models.DecimalField(decimal_places=2, max_digits=12, default=0)
 
 
@@ -32,4 +32,4 @@ class Notification(models.Model):
 class NotificationHistory(models.Model):
     notification = models.ForeignKey(Notification, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    dismissed = models.BooleanField()
+    dismissed = models.BooleanField(default=False)

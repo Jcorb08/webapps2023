@@ -14,7 +14,7 @@ class PayForm(forms.Form):
     form_user = forms.ModelChoiceField(
         queryset=None,
         help_text="Select the user",
-        empty_label=None
+        empty_label=None,
     )
     # Min value is 1p as they have to request more than nothing
     form_amount = forms.DecimalField(decimal_places=2, max_digits=12, min_value=0.01)

@@ -8,23 +8,23 @@
     {% if user.is_authenticated %}
         <div class="container text-center">
             <div class="row justify-content-md-center align-items-center">
-                <div class="col-md-auto">
-                    <h1>WebApps Payment Service</h1>
+                <div class="col-md-auto ps-0">
+                    <h1 class="h2">WebApps Payment Service</h1>
                 </div>
                 <div class="col">
                     <p class="mb-0">Balance: {{ user.currency.symbol }}{{ user.balance }}</p>
                 </div>
             </div>
         </div>
-        {% if requests_list or payment_request_list %}
-            <h2>Notification List:</h2>
+        {% if requests_list or payment_request_list or transaction_list %}
+            <h2 class="h3">Notification List:</h2>
             <table class="table table-hover table-sm">
             {#    # = payment request from current user's account (from user to another)#}
                 {% if requests_list %}
                     <thead>
                         <tr class="table-info">
                             <th scope="col">#</th>
-                            <th scope="col">Request From</th>
+                            <th scope="col" colspan="2">Request From</th>
                             <th scope="col">Amount</th>
                             <th scope="col">Remove</th>
                         </tr>
@@ -33,8 +33,8 @@
                     {% for request in requests_list %}
                         <tr>
                             <th scope="row">{{ forloop.counter }}</th>
-                            <td>{{ request.to_user.username }}</td>
-                            <td>{{ user.currency.symbol }}{{ request.amount }}</td>
+                            <td colspan="2">{{ request.notification.to_user.username }}</td>
+                            <td>{{ user.currency.symbol }}{{ request.notification.amount }}</td>
                             <td><a class="btn btn-danger btn-sm" href="/?notification={{ request.pk }}">Remove</a>
                             </td>
                         </tr>
@@ -46,18 +46,45 @@
                     <thead>
                         <tr class="table-info">
                             <th scope="col">#</th>
-                            <th scope="col">Sent Request To</th>
+                            <th scope="col" colspan="2">Sent Request To</th>
                             <th scope="col">Amount</th>
                             <th scope="col">Remove</th>
                         </tr>
                     </thead>
                     <tbody>
-                    {% for payment in payment_request_list %}
+                    {% for payment_request in payment_request_list %}
                         <tr>
                             <th scope="row">{{ forloop.counter }}</th>
-                            <td>{{ payment.from_user.username }}</td>
-                            <td>{{ user.currency.symbol }}{{ payment.amount }}</td>
-                            <td><a class="btn btn-danger btn-sm" href="/?notification={{ payment.pk }}">Remove</a>
+                            <td colspan="2">{{ payment_request.notification.from_user.username }}</td>
+                            <td>{{ user.currency.symbol }}{{ payment_request.notification.amount }}</td>
+                            <td><a class="btn btn-danger btn-sm" href="/?notification={{ payment_request.pk }}">Remove</a>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                {% endif %}
+                {% if transaction_list %}
+                    {# = transaction into and out of current user's account #}
+                    <thead>
+                    <tr class="table-info">
+                        <th scope="col">#</th>
+                        <th scope="col">Payment From</th>
+                        <th scope="col">Payment To</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Remove</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for transaction in transaction_list %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>{{ transaction.transaction.from_user.username }}</td>
+                            <td>{{ transaction.transaction.to_user.username }}</td>
+                            {% if transaction.transaction.to_user == user %}
+                                <td> + {{ user.currency.symbol }}{{ transaction.transaction.amount }}</td>
+                            {% else %}
+                                <td> - {{ user.currency.symbol }}{{ transaction.transaction.amount }}</td>
+                            {% endif %}
+                            <td><a class="btn btn-danger btn-sm" href="/?transaction={{ transaction.pk }}">Remove</a>
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -65,15 +92,15 @@
             </table>
         {% endif %}
         {% if balance_history %}
-            <h2>Transaction List:</h2>
+            <h2 class="h3">Transaction List:</h2>
             <table class="table table-striped table-hover table-sm">
                 <thead class="thead-dark">
-                    <tr>
+                    <tr class="table-info">
                         <th scope="col">#</th>
                         <th scope="col">From</th>
                         <th scope="col">To</th>
                         <th scope="col">Amount</th>
-                        <th scope="col">Overall Balance</th>
+                        <th scope="col">Balance</th>
                     </tr>
                 </thead>
                 <tbody>
