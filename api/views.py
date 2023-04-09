@@ -26,7 +26,9 @@ class Conversion(APIView):
             .filter(currency_to=currency_to).first()
 
         response['rate'] = conversion_rate.rate
-        if self.kwargs['amount']:
+        try:
             amount = self.kwargs['amount'] * conversion_rate.rate
             response['amount'] = amount
+        except KeyError:
+            pass
         return Response(response)
