@@ -1,0 +1,74 @@
+[
+  {
+    "model": "register.conversionrate",
+    "fields": {
+      "currency_from": "GBP",
+      "currency_to": "GBP",
+      "rate": "1"
+    }
+  },
+  {
+    "model": "register.conversionrate",
+    "fields": {
+      "currency_from": "GBP",
+      "currency_to": "USD",
+      "rate": "1.241"
+    }
+  },
+  {
+    "model": "register.conversionrate",
+    "fields": {
+      "currency_from": "GBP",
+      "currency_to": "EUR",
+      "rate": "1.139"
+    }
+  },
+  {
+    "model": "register.conversionrate",
+    "fields": {
+      "currency_from": "USD",
+      "currency_to": "USD",
+      "rate": "1"
+    }
+  },
+  {
+    "model": "register.conversionrate",
+    "fields": {
+      "currency_from": "USD",
+      "currency_to": "EUR",
+      "rate": "0.917"
+    }
+  },
+  {
+    "model": "register.conversionrate",
+    "fields": {
+      "currency_from": "USD",
+      "currency_to": "GBP",
+      "rate": "0.805"
+    }
+  },
+  {
+    "model": "register.conversionrate",
+    "fields": {
+      "currency_from": "EUR",
+      "currency_to": "EUR",
+      "rate": "1"
+    }
+  },
+  {
+    "model": "register.conversionrate",
+    "fields": {
+      "currency_from": "EUR",
+      "currency_to": "GBP",
+      "rate": "0.877"
+    }
+  },
+  {
+    "model": "register.conversionrate",
+    "fields": {
+      "currency_from": "EUR",
+      "currency_to": "USD",
+      "rate": "1.090"
+    }
+  }
+]

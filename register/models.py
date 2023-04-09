@@ -29,6 +29,14 @@ class Currency(models.Model):
         return self.currency_type + ' ' + self.symbol
 
 
+class ConversionRate(models.Model):
+    currency_from = models.ForeignKey(Currency, on_delete=models.CASCADE, default=Currency.CurrencyType.POUND,
+                                      related_name='from_currency')
+    currency_to = models.ForeignKey(Currency, on_delete=models.CASCADE, default=Currency.CurrencyType.POUND,
+                                    related_name='to_currency')
+    rate = models.DecimalField(decimal_places=3, max_digits=6, default=1)
+
+
 #######
 # Create custom User Model
 # that way we can link preferred currency and balance to user

@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'crispy_bootstrap4',
     'django_extensions',
     'payapp.apps.PayappConfig',
-    'register.apps.RegisterConfig'
+    'register.apps.RegisterConfig',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [

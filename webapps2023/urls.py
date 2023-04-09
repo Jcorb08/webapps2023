@@ -14,17 +14,22 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from payapp import views
+from django.urls import path,include
 from register import views as register_views
 from payapp import views as payapp_views
+from api import views as api_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home, name="home"),
+    path('', payapp_views.home, name="home"),
     path('register/', register_views.register_user, name='register'),
     path('login/', register_views.login_user, name='login'),
     path('logout/', register_views.logout_user, name='logout'),
     path('request/', payapp_views.payment, name='request'),
-    path('send/', payapp_views.payment, name='send')
+    path('send/', payapp_views.payment, name='send'),
+    path('api-auth/', include('rest_framework.urls')),
+    path('conversion/<str:currency_from>/<str:currency_to>/<int:amount>',
+         api_views.Conversion.as_view(), name='conversion_rate'),
+    path('conversion/<str:currency_from>/<str:currency_to>',
+         api_views.Conversion.as_view(), name='conversion_amount')
 ]
