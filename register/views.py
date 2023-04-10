@@ -1,10 +1,13 @@
 # Create your views here.
+import urllib3
 from django.shortcuts import render, redirect
 from .forms import RegisterForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_protect
+import requests
+from decimal import Decimal
 
 
 # Create your views here.
@@ -16,6 +19,20 @@ def register_user(request):
             user = register_form.save()
             # initialised £1000
             # use restful service to change to be exchange rate of 1000
+
+            # remove warnings in console due to Unverified HTTPS
+            urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+            url = 'https://' + request.get_host()
+            url += '/conversion/{currency_from}/{currency_to}/{amount}'.format(
+                currency_from='GBP',
+                currency_to=user.currency.pk,
+                amount=Decimal(user.balance)
+            )
+            # has to be verify False due to SSL certificate being self-signed
+            resp = requests.get(url, verify=False).json()
+            print(resp)
+            user.balance = resp['amount']
+            user.save()
             return redirect('login')
         messages.error(request, "Unsuccessful registration. Invalid info")
     else:

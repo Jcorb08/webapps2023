@@ -25,6 +25,7 @@
                         <tr class="table-info">
                             <th scope="col">#</th>
                             <th scope="col" colspan="2">Request From</th>
+                            <th scope="col">Conversion</th>
                             <th scope="col">Amount</th>
                             <th scope="col">Remove</th>
                         </tr>
@@ -34,7 +35,14 @@
                         <tr>
                             <th scope="row">{{ forloop.counter }}</th>
                             <td colspan="2">{{ request.notification.to_user.username }}</td>
-                            <td>{{ user.currency.symbol }}{{ request.notification.amount }}</td>
+                            {% if request.rate == 1.0 %}
+                                <td>N/A</td>
+                            {% else %}
+                            <td>({{ request.notification.to_user.currency.symbol}}{{ request.notification.amount }}
+                                x {{ request.rate }})</td>
+                            {% endif %}
+                            <td>
+                                {{ user.currency.symbol }}{{ request.converted_amount }}</td>
                             <td><a class="btn btn-danger btn-sm" href="/?notification={{ request.pk }}">Remove</a>
                             </td>
                         </tr>
@@ -46,7 +54,7 @@
                     <thead>
                         <tr class="table-info">
                             <th scope="col">#</th>
-                            <th scope="col" colspan="2">Sent Request To</th>
+                            <th scope="col" colspan="3">Sent Request To</th>
                             <th scope="col">Amount</th>
                             <th scope="col">Remove</th>
                         </tr>
@@ -55,7 +63,7 @@
                     {% for payment_request in payment_request_list %}
                         <tr>
                             <th scope="row">{{ forloop.counter }}</th>
-                            <td colspan="2">{{ payment_request.notification.from_user.username }}</td>
+                            <td colspan="3">{{ payment_request.notification.from_user.username }}</td>
                             <td>{{ user.currency.symbol }}{{ payment_request.notification.amount }}</td>
                             <td><a class="btn btn-danger btn-sm" href="/?notification={{ payment_request.pk }}">Remove</a>
                         </tr>
@@ -69,6 +77,7 @@
                         <th scope="col">#</th>
                         <th scope="col">Payment From</th>
                         <th scope="col">Payment To</th>
+                        <th scope="col">Conversion</th>
                         <th scope="col">Amount</th>
                         <th scope="col">Remove</th>
                     </tr>
@@ -79,10 +88,16 @@
                             <th scope="row">{{ forloop.counter }}</th>
                             <td>{{ transaction.transaction.from_user.username }}</td>
                             <td>{{ transaction.transaction.to_user.username }}</td>
-                            {% if transaction.transaction.to_user == user %}
-                                <td> + {{ user.currency.symbol }}{{ transaction.transaction.amount }}</td>
+                            {% if transaction.rate == 1.0 %}
+                            <td>N/A</td>
                             {% else %}
-                                <td> - {{ user.currency.symbol }}{{ transaction.transaction.amount }}</td>
+                            <td>({{ transaction.transaction.from_user.currency.symbol}}{{ transaction.transaction.amount}}
+                                x {{ transaction.rate }})</td>
+                            {% endif %}
+                            {% if transaction.transaction.to_user == user %}
+                                <td>+ {{ user.currency.symbol }}{{ transaction.converted_amount }}</td>
+                            {% else %}
+                                <td>- {{ user.currency.symbol }}{{ transaction.converted_amount }}</td>
                             {% endif %}
                             <td><a class="btn btn-danger btn-sm" href="/?transaction={{ transaction.pk }}">Remove</a>
                         </tr>
@@ -110,9 +125,9 @@
                         <td>{{ balance.transaction.from_user.username }}</td>
                         <td>{{ balance.transaction.to_user.username }}</td>
                         {% if balance.transaction.to_user == user %}
-                            <td> + {{ user.currency.symbol }}{{ balance.transaction.amount }}</td>
+                            <td> + {{ user.currency.symbol }}{{ balance.converted_amount }}</td>
                         {% else %}
-                            <td> - {{ user.currency.symbol }}{{ balance.transaction.amount }}</td>
+                            <td> - {{ user.currency.symbol }}{{ balance.converted_amount }}</td>
                         {% endif %}
                         <td>{{ user.currency.symbol }}{{ balance.balance }}</td>
                     </tr>

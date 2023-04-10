@@ -4,7 +4,7 @@
     "fields": {
       "currency_from": "GBP",
       "currency_to": "GBP",
-      "rate": "1"
+      "rate": "1.000"
     }
   },
   {
@@ -28,7 +28,7 @@
     "fields": {
       "currency_from": "USD",
       "currency_to": "USD",
-      "rate": "1"
+      "rate": "1.000"
     }
   },
   {
@@ -52,7 +52,7 @@
     "fields": {
       "currency_from": "EUR",
       "currency_to": "EUR",
-      "rate": "1"
+      "rate": "1.000"
     }
   },
   {

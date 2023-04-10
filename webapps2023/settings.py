@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'django_extensions',
     'payapp.apps.PayappConfig',
     'register.apps.RegisterConfig',
-    'rest_framework'
+    'rest_framework',
+    'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
@@ -136,3 +137,11 @@ RUNSERVERPLUS_SERVER_ADDRESS_PORT = 'localhost:8000'
 
 # messages
 MESSAGE_TAGS = {messages.ERROR: 'alert alert-danger'}
+
+#rest
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': [
+#         'rest_framework.authentication.BasicAuthentication',
+#         'rest_framework.authentication.SessionAuthentication',
+#     ]
+# }

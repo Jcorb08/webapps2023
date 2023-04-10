@@ -1,3 +1,5 @@
+import requests
+import urllib3
 from django.db import transaction
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -5,6 +7,7 @@ from payapp.forms import PayForm
 from payapp.models import Notification, BalanceHistory, Transaction, NotificationHistory
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import cache_control
+from decimal import Decimal
 
 
 # the home page view
@@ -24,16 +27,36 @@ def home(request):
             n.save()
             return redirect('home')
         else:
+            def add_converted_amounts(object_list, linked_table):
+                # remove warnings in console due to Unverified HTTPS
+                urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+                for single_object in object_list:
+                    url = 'https://' + request.get_host()
+                    url += '/conversion/{currency_from}/{currency_to}/{amount}'.format(
+                        currency_from=getattr(single_object, linked_table).from_user.currency.pk,
+                        currency_to=getattr(single_object, linked_table).to_user.currency.pk,
+                        amount=Decimal(getattr(single_object, linked_table).amount)
+                    )
+                    # has to be verify False due to SSL certificate being self-signed
+                    resp = requests.get(url, verify=False).json()
+                    single_object.converted_amount = round(Decimal(resp['amount']), 2)
+                    single_object.rate = resp['rate']
+                return object_list
+
             ######
             # get all request notifications (from user to another)
+            # needs conversion
             ######
             requests_list = NotificationHistory.objects \
                 .filter(user=request.user.pk)\
                 .filter(notification__from_user=request.user.pk) \
                 .filter(dismissed=False)
+
+            requests_list = add_converted_amounts(requests_list, 'notification')
             print(requests_list)
             ######
             # get all requested notifications (to user from another)
+            # always in user's currency
             ######
             payment_request_list = NotificationHistory.objects \
                 .filter(user=request.user.pk) \
@@ -42,17 +65,21 @@ def home(request):
             print(payment_request_list)
             ######
             # get all transaction notifications
+            # amount needs conversion
             ######
             transaction_list = BalanceHistory.objects \
                 .filter(user=request.user.pk) \
                 .filter(dismissed=False)
-            print(payment_request_list)
+            transaction_list = add_converted_amounts(transaction_list, 'transaction')
+            print(transaction_list)
             ######
             # get all transactions relating to user
+            # amount needs conversion
             ######
             balance_history = BalanceHistory.objects \
                 .filter(user=request.user.pk) \
                 .order_by('-pk')
+            balance_history = add_converted_amounts(balance_history, 'transaction')
             print(balance_history)
             # send to template
             return render(request, 'payapp/home.html', {
@@ -94,20 +121,33 @@ def payment(request):
                     if request.user.balance - form_amount >= 0:
                         # set notification that money sent (a payment)
                         # transaction uses the request.user's currency - need to convert this if form_user different
-                        t = Transaction(from_user=request.user, to_user=form_user, amount=form_amount)
-                        t.save()
-                        request.user.balance = request.user.balance - form_amount
-                        request.user.save()
-                        bh_from = BalanceHistory(transaction=t, user=request.user,
-                                                 balance=request.user.balance, dismissed=False)
-                        bh_from.save()
-                        form_user.balance = form_user.balance + form_amount
-                        form_user.save()
-                        bh_to = BalanceHistory(transaction=t, user=form_user, balance=form_user.balance, dismissed=False)
-                        bh_to.save()
-                        # modify to use RESTful service
+                        try:
+                            # remove warnings in console due to Unverified HTTPS
+                            urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+                            url = 'https://' + request.get_host()
+                            t = Transaction(from_user=request.user, to_user=form_user, amount=form_amount)
+                            t.save()
 
-                        return redirect('home')
+                            request.user.balance = request.user.balance - form_amount
+                            request.user.save()
+                            bh_from = BalanceHistory(transaction=t, user=request.user,
+                                                     balance=request.user.balance, dismissed=False)
+                            bh_from.save()
+                            url += '/conversion/{currency_from}/{currency_to}/{amount}'.format(
+                                currency_from=request.user.currency.pk,
+                                currency_to=form_user.currency.pk,
+                                amount=Decimal(form_amount)
+                            )
+                            # has to be verify False due to SSL certificate being self-signed
+                            resp = requests.get(url, verify=False).json()
+
+                            form_user.balance = Decimal(form_user.balance) + Decimal(resp['amount'])
+                            form_user.save()
+                            bh_to = BalanceHistory(transaction=t, user=form_user, balance=form_user.balance, dismissed=False)
+                            bh_to.save()
+                            return redirect('home')
+                        except requests.exceptions.JSONDecodeError:
+                            messages.error(request, "Unsuccessful Request. Internal Error")
                     else:
                         messages.error(request, "Unsuccessful Request. Insufficient funds")
                 else:

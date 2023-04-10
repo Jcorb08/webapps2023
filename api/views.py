@@ -1,16 +1,12 @@
+from decimal import Decimal
 from rest_framework.views import APIView
-from rest_framework import permissions  # , authentication
 from rest_framework.response import Response
-
 from api.exception import CurrencyIncorrect
 from register.models import Currency, ConversionRate
 
 
 # Create your views here.
 class Conversion(APIView):
-    # requires a tokenAuth and only Users can access this view
-    # authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, format=None, **kwargs):
         """
@@ -27,8 +23,8 @@ class Conversion(APIView):
 
         response['rate'] = conversion_rate.rate
         try:
-            amount = self.kwargs['amount'] * conversion_rate.rate
-            response['amount'] = amount
+            amount = Decimal(self.kwargs['amount']) * Decimal(conversion_rate.rate)
+            response['amount'] = round(amount, 2)
         except KeyError:
             pass
         return Response(response)
