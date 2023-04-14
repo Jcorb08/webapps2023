@@ -286,3 +286,4 @@ fabric.properties
 .idea/**/azureSettings.xml
 
 # End of https://www.toptal.com/developers/gitignore/api/django,intellij
+/.idea/inspectionProfiles/Project_Default.xml
