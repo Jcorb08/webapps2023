@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'payapp.apps.PayappConfig',
     'register.apps.RegisterConfig',
     'rest_framework',
-    'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
