@@ -36,6 +36,9 @@ class ConversionRate(models.Model):
                                     related_name='to_currency')
     rate = models.DecimalField(decimal_places=3, max_digits=6, default=1)
 
+    def __str__(self):
+        return self.currency_from.pk + ' to ' + self.currency_to.pk + ': ' + self.rate.__str__()
+
 
 #######
 # Create custom User Model

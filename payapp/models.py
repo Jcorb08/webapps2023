@@ -10,6 +10,9 @@ class Transaction(models.Model):
     to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='transaction_to_user')
     amount = models.DecimalField(decimal_places=2, max_digits=12, default=0)
 
+    def __str__(self):
+        return self.from_user.username + ' to ' + self.to_user.username + ': ' + self.amount.__str__()
+
 
 # Represents a History of Balances after transactions for each party involved
 class BalanceHistory(models.Model):
@@ -26,6 +29,9 @@ class Notification(models.Model):
     from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notification_from_user')
     to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notification_to_user')
     amount = models.DecimalField(decimal_places=2, max_digits=12, default=0)
+
+    def __str__(self):
+        return self.from_user.username + ' to ' + self.to_user.username + ': ' + self.amount.__str__()
 
 
 # Keeps track of which users have dismissed the notification
