@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'payapp.apps.PayappConfig',
     'register.apps.RegisterConfig',
     'rest_framework',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -53,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'webapps2023.urls'
@@ -137,10 +139,16 @@ RUNSERVERPLUS_SERVER_ADDRESS_PORT = 'localhost:8000'
 # messages
 MESSAGE_TAGS = {messages.ERROR: 'alert alert-danger'}
 
-#rest
+# rest
 # REST_FRAMEWORK = {
 #     'DEFAULT_AUTHENTICATION_CLASSES': [
 #         'rest_framework.authentication.BasicAuthentication',
 #         'rest_framework.authentication.SessionAuthentication',
 #     ]
 # }
+
+# cors
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:8000',
+)
