@@ -30,8 +30,8 @@ SECRET_KEY = env.str('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=True)
 
-ALLOWED_HOSTS = env('ALLOWED_HOSTS')
-SECURE_SSL_REDIRECT = env('SECURE_SSL_REDIRECT')
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
+SECURE_SSL_REDIRECT = env.bool('SECURE_SSL_REDIRECT')
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Application definition
