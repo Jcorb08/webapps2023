@@ -12,6 +12,7 @@ from decimal import Decimal
 
 # Create your views here.
 @csrf_protect
+# register the user
 def register_user(request):
     if request.method == 'POST':
         register_form = RegisterForm(request.POST)
@@ -31,6 +32,7 @@ def register_user(request):
             # has to be verify False due to SSL certificate being self-signed
             resp = requests.get(url, verify=False).json()
             print(resp)
+            # set user balance to converted amount
             user.balance = resp['amount']
             user.save()
             return redirect('login')
@@ -66,6 +68,7 @@ def login_user(request):
     return render(request, 'register/login.html', {'login_user': login_form})
 
 
+# log user out
 def logout_user(request):
     logout(request)
     messages.info(request, 'You are now logged out')

@@ -29,6 +29,7 @@ class Currency(models.Model):
         return self.currency_type + ' ' + self.symbol
 
 
+# represents the conversionRates of the currencies
 class ConversionRate(models.Model):
     currency_from = models.ForeignKey(Currency, on_delete=models.CASCADE, default=Currency.CurrencyType.POUND,
                                       related_name='from_currency')

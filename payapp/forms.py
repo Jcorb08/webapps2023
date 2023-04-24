@@ -3,6 +3,7 @@ from django import forms
 from register.models import User
 
 
+# form for sending and requesting money form users
 class PayForm(forms.Form):
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user')

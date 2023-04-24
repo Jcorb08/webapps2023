@@ -16,6 +16,7 @@ from decimal import Decimal
 def home(request):
     # ensure user is logged in
     if request.user.is_authenticated:
+        # dismiss notifications at the top if removed clicked
         if request.GET.get('notification'):
             n = NotificationHistory.objects.filter(pk=request.GET.get('notification')).first()
             n.dismissed = True
