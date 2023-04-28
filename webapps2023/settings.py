@@ -30,7 +30,7 @@ SECRET_KEY = env.str('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=True)
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "54.162.27.144"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "ec2-54-145-71-166.compute-1.amazonaws.com"]
 SECURE_SSL_REDIRECT = env.bool('SECURE_SSL_REDIRECT')
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
